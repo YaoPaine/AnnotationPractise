@@ -1,4 +1,4 @@
 package com.yao.annotation;
 
-public class BindColor {
+public @interface BindColor {
 }

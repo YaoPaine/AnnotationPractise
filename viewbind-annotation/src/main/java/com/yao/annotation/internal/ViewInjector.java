@@ -1,4 +1,4 @@
-package com.yao.processor.internal;
+package com.yao.annotation.internal;
 
 public class ViewInjector implements Injector {
 

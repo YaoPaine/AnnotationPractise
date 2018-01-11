@@ -1,4 +1,4 @@
-package com.yaopaine.annotationpractise;
+package com.yaopaine.annotationpractise.processor;
 
 public class ViewBindProcessor {
 }

@@ -1,4 +1,4 @@
 package com.yao.annotation;
 
-public class BindString {
+public @interface BindString {
 }

@@ -1,5 +1,5 @@
-package com.yao.processor.internal;
+package com.yao.annotation.internal;
 
 public interface Finder {
-    Object findViewById();
+    Object findViewById(long id);
 }

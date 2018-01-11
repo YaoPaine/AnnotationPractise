@@ -4,10 +4,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
+import com.yao.annotation.BindView;
 
 public class SecondActivity extends AppCompatActivity {
 
     private String TAG = "SecondActivity";
+
+    @BindView(R.id.tv)
+    TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
