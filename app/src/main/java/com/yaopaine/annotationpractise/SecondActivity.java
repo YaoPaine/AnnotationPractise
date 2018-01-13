@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 import com.yao.annotation.BindView;
+import com.yao.viewbind.ViewInjector;
 
 public class SecondActivity extends AppCompatActivity {
 
@@ -18,6 +19,7 @@ public class SecondActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
+        ViewInjector.bind(this);
     }
 
     @Override
@@ -36,6 +38,7 @@ public class SecondActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        tv.setText(R.string.app_name);
         Log.e(TAG, "onStart: ");
     }
 

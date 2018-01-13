@@ -1,8 +1,6 @@
 package com.yao.processor.model;
 
 import com.squareup.javapoet.*;
-import com.yao.annotation.internal.Finder;
-import com.yao.annotation.internal.Injector;
 
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
@@ -47,24 +45,33 @@ public class AnnotatedClass {
     /**
      * @return 输出Java file
      */
-    public JavaFile outputFile() {
-        MethodSpec.Builder injectMethod = MethodSpec.methodBuilder("inject")
+    public JavaFile outputFile() throws ClassNotFoundException {
+        MethodSpec.Builder bindMethod = MethodSpec.methodBuilder("bind")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
-                .addParameter(TypeName.get(mClassElement.asType()), "host", Modifier.FINAL)
-                .addParameter(TypeName.OBJECT, "source")
-                .addParameter(Finder.class, "finder");
+                .addParameter(Class.forName("com.yao.viewbind.Finder"), "finder")
+                .addParameter(TypeName.get(mClassElement.asType()), "target", Modifier.FINAL)
+                .addParameter(TypeName.OBJECT, "source");
+
+        MethodSpec.Builder unbindMethod = MethodSpec.methodBuilder("unbind")
+                .addParameter(TypeName.get(mClassElement.asType()), "target")
+                .addAnnotation(Override.class)
+                .addModifiers(Modifier.PUBLIC)
+                .returns(TypeName.VOID);
+
         for (BindViewFiled field : mFiled) {
-            injectMethod.addStatement("host.$N=($T)finder.findViewById($L)"
+            bindMethod.addStatement("target.$N=($T)finder.findView(target,$L)"
                     , field.getFieldName(), ClassName.get(field.getFieldType()), field.getResId());
+            unbindMethod.addStatement("target.$N=null", field.getFieldName());
         }
         String packageName = getPackageName(mClassElement);
         String className = getClassName(mClassElement, packageName);
         ClassName buildClass = ClassName.get(packageName, className);
         System.out.println(buildClass.toString());
         TypeSpec typeSpec = TypeSpec.classBuilder(buildClass.simpleName() + "$$Injector")
-                .addMethod(injectMethod.build())
-                .addSuperinterface(ParameterizedTypeName.get(ClassName.get(Injector.class), TypeName.get(mClassElement.asType())))
+                .addMethod(bindMethod.build())
+                .addMethod(unbindMethod.build())
+                .addSuperinterface(ParameterizedTypeName.get(ClassName.get("com.yao.viewbind", "ViewBinder"), TypeName.get(mClassElement.asType())))
                 .addModifiers(Modifier.PUBLIC)
                 .build();
         return JavaFile.builder(packageName, typeSpec).build();

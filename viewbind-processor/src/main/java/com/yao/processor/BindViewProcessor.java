@@ -77,6 +77,8 @@ public class BindViewProcessor extends AbstractProcessor {
         } catch (IOException e) {
             e.printStackTrace();
             Logger.getLogger(TAG).log(Level.SEVERE, String.format("generating file failed, reason is :  %s", e.getMessage()));
+        } catch (ClassNotFoundException e) {
+            Logger.getLogger(TAG).log(Level.WARNING, String.format("com.yao.viewbind.Finder is not, found reason is： %s", e.getMessage()));
         }
         return true;
     }
